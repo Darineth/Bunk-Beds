@@ -14,18 +14,16 @@ namespace BunkBeds
             return typeof(JobDriver_LayDown).GetMethods(AccessTools.all).FirstOrDefault(x => x.Name.Contains("<MakeNewToils>b__16_0"));
         }
 
-        public static void Prefix(JobDriver_LayDown __instance, out IntVec3 __state)
+        // The GotoBed fail condition is "downed, can't crawl, and not inside the bed's rect". Bunk bed
+        // occupants all share the bed's cell, so the condition never applies to them. Override the
+        // result instead of moving the pawn onto the bed cell and back every tick, which re-registered
+        // it in the thing, cover, gas and region grids twice per tick for every pawn walking to bed.
+        public static void Postfix(JobDriver_LayDown __instance, ref bool __result)
         {
-            __state = __instance.pawn.Position;
-            if (__instance.Bed.IsBunkBed())
+            if (__result && __instance.Bed.IsBunkBed())
             {
-                __instance.pawn.Position = __instance.Bed.Position;
+                __result = false;
             }
-        }
-
-        public static void Postfix(JobDriver_LayDown __instance, IntVec3 __state)
-        {
-            __instance.pawn.Position = __state;
         }
     }
 }
