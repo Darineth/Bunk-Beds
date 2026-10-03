@@ -86,7 +86,7 @@ namespace BunkBeds
     }
 
     [HotSwappable]
-    public class CompBunkBed : ThingComp
+    public sealed class CompBunkBed : ThingComp
     {
         public static Dictionary<int, CompBunkBed> bunkBeds = new Dictionary<int, CompBunkBed>();
         public CompProperties_BunkBed Props => props as CompProperties_BunkBed;
