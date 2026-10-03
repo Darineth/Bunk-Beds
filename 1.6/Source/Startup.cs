@@ -7,39 +7,20 @@ namespace BunkBeds
     [StaticConstructorOnStartup]
     public static class Utils
     {
-        public static ThingWithComps bunkBed;
-        public static CompBunkBed compBunkBed;
-
+        // No memoisation: these are called from the parallel pre-draw, where a cache split across two
+        // static fields can be read half-updated (another bed's comp), and every thread writing the
+        // same statics bounces the cache line between cores. An int-keyed lookup is cheap enough.
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsBunkBed(this ThingWithComps bed)
         {
-            if (bed is null) return false;
-            if (bunkBed == bed)
-            {
-                return true;
-            }
-            if (CompBunkBed.bunkBeds.ContainsKey(bed.thingIDNumber))
-            {
-                bunkBed = bed;
-                return true;
-            }
-            return false;
+            return bed != null && CompBunkBed.bunkBeds.ContainsKey(bed.thingIDNumber);
         }
-
-        public static ThingWithComps bunkBed2;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsBunkBed(this ThingWithComps bed, out CompBunkBed comp)
         {
-            if (bed != null && bed == bunkBed2)
-            {
-                comp = compBunkBed;
-                return comp != null;
-            }
             if (bed != null && CompBunkBed.bunkBeds.TryGetValue(bed.thingIDNumber, out comp))
             {
-                bunkBed2 = bed;
-                compBunkBed = comp;
                 return true;
             }
             comp = null;
