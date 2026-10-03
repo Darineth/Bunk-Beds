@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ModMetaData>
-	<name>Bunk Beds</name>
+	<name>Bunk Beds (Perf Fork)</name>
 	<author>Darknote</author>
 	<url/>
 	<supportedVersions>
@@ -19,4 +19,8 @@ The mod comes with two versions of the bunk bed, one with 2 beds and one with 3.
 		<li>Ludeon.RimWorld.Odyssey</li>
 		<li>brrainz.harmony</li>
 	</loadAfter>
+	<loadBefore>
+		<!-- VGE bundles its own BunkBeds.dll; load first so this build is the copy that gets used. -->
+		<li>vanillaexpanded.gravship</li>
+	</loadBefore>
 </ModMetaData>
