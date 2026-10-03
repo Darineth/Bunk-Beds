@@ -32,7 +32,7 @@ namespace BunkBeds
             var building_Bed = actor.CurJob.GetTarget(___bedIndex).Thing as Building_Bed;
             if (building_Bed.IsBunkBed())
             {
-                var cell = RestUtility.GetBedSleepingSlotPosFor(actor, building_Bed);
+                var cell = building_Bed.Position;
                 if (actor.pather.Destination.Cell != cell)
                 {
                     actor.pather.StartPath(cell, PathEndMode.OnCell);
